@@ -1,0 +1,28 @@
+{
+  "name": "sow-club-website",
+  "version": "1.0.0",
+  "description": "S.O.W Club Website - Full-stack application with React frontend and Node.js backend",
+  "private": true,
+  "scripts": {
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "sow-club",
+    "dance-club",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
+  "author": "S.O.W Club",
+  "license": "UNLICENSED"
+}
+
