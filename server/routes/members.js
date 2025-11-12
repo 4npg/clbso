@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const Member = require('../models/Member');
 const { auth, adminAuth } = require('../middleware/auth');
@@ -6,11 +7,16 @@ const { auth, adminAuth } = require('../middleware/auth');
 // Get all members (public - only active members)
 router.get('/', async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ message: 'Database not connected. Please check MongoDB connection.' });
+    }
+    
     const members = await Member.find({ isActive: true })
       .select('name role position bio avatar joinDate contributions')
       .sort({ joinDate: -1 });
     res.json(members);
   } catch (error) {
+    console.error('Members fetch error:', error);
     res.status(500).json({ message: error.message });
   }
 });

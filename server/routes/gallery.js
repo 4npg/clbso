@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const Gallery = require('../models/Gallery');
 const { auth, adminAuth } = require('../middleware/auth');
@@ -6,6 +7,10 @@ const { auth, adminAuth } = require('../middleware/auth');
 // Get all gallery items (public only for non-authenticated)
 router.get('/', async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ message: 'Database not connected. Please check MongoDB connection.' });
+    }
+    
     const query = req.user ? {} : { isPublic: true };
     const gallery = await Gallery.find(query)
       .populate('event', 'title date')
@@ -13,6 +18,7 @@ router.get('/', async (req, res) => {
       .sort({ createdAt: -1 });
     res.json(gallery);
   } catch (error) {
+    console.error('Gallery fetch error:', error);
     res.status(500).json({ message: error.message });
   }
 });

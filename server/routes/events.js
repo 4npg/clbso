@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const Event = require('../models/Event');
 const { auth, adminAuth } = require('../middleware/auth');
@@ -6,12 +7,17 @@ const { auth, adminAuth } = require('../middleware/auth');
 // Get all events (public events only for non-authenticated)
 router.get('/', async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ message: 'Database not connected. Please check MongoDB connection.' });
+    }
+    
     const query = req.user ? {} : { isPublic: true };
     const events = await Event.find(query)
       .populate('participants', 'name avatar')
       .sort({ date: -1 });
     res.json(events);
   } catch (error) {
+    console.error('Events fetch error:', error);
     res.status(500).json({ message: error.message });
   }
 });
