@@ -52,7 +52,7 @@ const Gallery = () => {
             Thư viện ảnh
           </motion.h1>
           <p className="text-xl opacity-90">
-            Những khoảnh khắc đẹp nhất của S.O.W Club
+            Những khoảnh khắc đẹp nhất của CLB S.O.W
           </p>
         </div>
       </section>

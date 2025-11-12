@@ -85,7 +85,7 @@ const About = () => {
               <h2 className="text-4xl font-bold mb-8 text-gray-800">Câu chuyện của chúng tôi</h2>
               
               <p>
-                S.O.W Club được thành lập với mong muốn tạo ra một cộng đồng nơi mọi người có thể 
+                CLB S.O.W được thành lập với mong muốn tạo ra một cộng đồng nơi mọi người có thể 
                 tự do thể hiện bản thân thông qua nghệ thuật múa. Chúng tôi tin rằng mỗi người đều 
                 có một câu chuyện riêng để kể, và múa là cách tuyệt vời nhất để kể câu chuyện đó.
               </p>

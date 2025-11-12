@@ -56,7 +56,7 @@ const Members = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl font-bold mb-4"
           >
-            Thành viên S.O.W
+            Thành viên nhà S.O.W
           </motion.h1>
           <p className="text-xl opacity-90">
             Gặp gỡ những thành viên tài năng của chúng tôi

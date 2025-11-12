@@ -86,7 +86,7 @@ const Events = () => {
             Lịch hoạt động
           </motion.h1>
           <p className="text-xl opacity-90">
-            Các sự kiện và hoạt động của S.O.W Club
+            Các sự kiện và hoạt động của CLB S.O.W
           </p>
         </div>
       </section>
