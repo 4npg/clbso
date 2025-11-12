@@ -102,7 +102,9 @@ const Gallery = () => {
                 onClick={() => setSelectedImage(item)}
               >
                 <img
-                  src={item.imageUrl || item.thumbnailUrl}
+                  src={item.imageUrl?.startsWith('http') 
+                    ? item.imageUrl 
+                    : `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${item.imageUrl || item.thumbnailUrl}`}
                   alt={item.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   loading="lazy"
@@ -129,7 +131,9 @@ const Gallery = () => {
         >
           <div className="max-w-4xl w-full">
             <img
-              src={selectedImage.imageUrl}
+              src={selectedImage.imageUrl?.startsWith('http') 
+                ? selectedImage.imageUrl 
+                : `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${selectedImage.imageUrl || selectedImage.thumbnailUrl}`}
               alt={selectedImage.title}
               className="w-full h-auto rounded-lg"
             />

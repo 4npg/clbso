@@ -63,7 +63,41 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('Sign in error:', error);
-      return { success: false, error: error.message };
+      
+      // Provide more helpful error messages
+      let errorMessage = error.message;
+      
+      // Firebase authentication errors
+      if (error.code === 'auth/configuration-not-found' || error.code === 'auth/invalid-api-key') {
+        errorMessage = 'Firebase configuration error. Please check your .env file and ensure your Firebase project is properly set up.';
+        console.error('💡 Make sure:');
+        console.error('   1. Your Firebase API key is correct');
+        console.error('   2. Google Sign-In is enabled in Firebase Console');
+        console.error('   3. Your auth domain matches your Firebase project');
+        console.error('   4. Check: https://console.firebase.google.com > Authentication > Sign-in method');
+      }
+      // Backend API errors
+      else if (error.response) {
+        const apiError = error.response.data;
+        errorMessage = apiError.message || 'Server error occurred. Please try again.';
+        
+        if (error.response.status === 404) {
+          errorMessage = 'Your account is not registered. Please contact an administrator to be added to the system.';
+        } else if (error.response.status === 503) {
+          errorMessage = 'Database connection error. Please check if the server is running and MongoDB is connected.';
+        } else if (error.response.status === 500) {
+          errorMessage = 'Server error. Please check the server logs or contact support.';
+        }
+        
+        console.error('API Error:', apiError);
+      }
+      // Network errors
+      else if (error.request) {
+        errorMessage = 'Cannot connect to server. Please make sure the backend server is running on port 5000.';
+        console.error('Network error - server may not be running');
+      }
+      
+      return { success: false, error: errorMessage };
     }
   };
 

@@ -3,8 +3,6 @@ import { motion } from 'framer-motion';
 import api from '../../config/api';
 import { useAuth } from '../../context/AuthContext';
 import { FiPlus, FiTrash2, FiImage, FiUpload } from 'react-icons/fi';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../config/firebase';
 
 const InternalGallery = () => {
   const { user } = useAuth();
@@ -53,53 +51,35 @@ const InternalGallery = () => {
       return;
     }
 
-    if (!storage) {
-      alert('Firebase Storage chưa được cấu hình. Vui lòng kiểm tra file .env và cấu hình Firebase.');
-      return;
-    }
-
     try {
       setUploading(true);
       
-      // Upload to Firebase Storage
-      const storageRef = ref(storage, `gallery/${Date.now()}_${selectedFile.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+      // Create FormData for file upload
+      const formDataToSend = new FormData();
+      formDataToSend.append('image', selectedFile);
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('description', formData.description || '');
+      formDataToSend.append('category', formData.category);
+      formDataToSend.append('isPublic', formData.isPublic);
 
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload progress:', progress);
-        },
-        (error) => {
-          console.error('Upload error:', error);
-          alert('Lỗi khi upload ảnh');
-          setUploading(false);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          
-          // Save to database
-          await api.post('/gallery', {
-            ...formData,
-            imageUrl: downloadURL
-          });
+      // Upload to server (Content-Type will be set automatically by axios for FormData)
+      const response = await api.post('/gallery', formDataToSend);
 
-          setShowModal(false);
-          setSelectedFile(null);
-          setFormData({
-            title: '',
-            description: '',
-            category: 'other',
-            isPublic: false
-          });
-          setUploading(false);
-          fetchGallery();
-        }
-      );
+      // Success
+      setShowModal(false);
+      setSelectedFile(null);
+      setFormData({
+        title: '',
+        description: '',
+        category: 'other',
+        isPublic: false
+      });
+      setUploading(false);
+      fetchGallery();
     } catch (error) {
       console.error('Error uploading:', error);
-      alert('Có lỗi xảy ra');
+      const errorMessage = error.response?.data?.message || 'Có lỗi xảy ra khi upload ảnh';
+      alert(errorMessage);
       setUploading(false);
     }
   };
@@ -158,7 +138,9 @@ const InternalGallery = () => {
             >
               <div className="relative aspect-square">
                 <img
-                  src={item.imageUrl || item.thumbnailUrl}
+                  src={item.imageUrl?.startsWith('http') 
+                    ? item.imageUrl 
+                    : `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${item.imageUrl || item.thumbnailUrl}`}
                   alt={item.title}
                   className="w-full h-full object-cover"
                 />

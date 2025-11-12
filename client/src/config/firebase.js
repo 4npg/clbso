@@ -42,12 +42,28 @@ if (isFirebaseConfigured) {
       appId: process.env.REACT_APP_FIREBASE_APP_ID
     };
 
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    storage = getStorage(app);
-    googleProvider = new GoogleAuthProvider();
+    // Validate that values aren't just placeholders
+    const hasPlaceholderValues = Object.values(firebaseConfig).some(
+      value => !value || value.includes('your-') || value === 'your-project-id' || value === 'your-firebase-api-key'
+    );
+
+    if (hasPlaceholderValues) {
+      console.error('❌ Firebase configuration contains placeholder values. Please update your .env file with actual Firebase credentials.');
+      console.error('📖 Get your Firebase config from: https://console.firebase.google.com');
+    } else {
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      storage = getStorage(app);
+      googleProvider = new GoogleAuthProvider();
+      console.log('✅ Firebase initialized successfully');
+    }
   } catch (error) {
     console.error('❌ Error initializing Firebase:', error);
+    console.error('💡 Common issues:');
+    console.error('   - Invalid API key or project ID');
+    console.error('   - Firebase project not properly set up');
+    console.error('   - Authentication not enabled in Firebase Console');
+    console.error('   - Check Firebase Console: https://console.firebase.google.com');
   }
 } else {
   // Create mock objects to prevent crashes when Firebase is not configured

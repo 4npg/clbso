@@ -23,6 +23,8 @@
     "mongodb"
   ],
   "author": "S.O.W Club",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "firebase": "^12.5.0"
+  }
 }
-

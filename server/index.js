@@ -10,8 +10,12 @@ const app = express();
 
 // Middleware
 app.use(cors());
+// Body parsers - these won't interfere with multipart/form-data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/members', require('./routes/members'));

@@ -51,7 +51,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-gray-400">
               <li className="flex items-center space-x-2">
                 <FiMail />
-                <span>sow.club@email.com</span>
+                <span>clbsowtruongthptdh@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -61,7 +61,7 @@ const Footer = () => {
             <h4 className="font-semibold mb-4">Theo dõi chúng tôi</h4>
             <div className="flex space-x-4">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/s.o.w_clbmuac3dh/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary-400 transition-colors"
@@ -69,7 +69,7 @@ const Footer = () => {
                 <FiInstagram size={24} />
               </a>
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/profile.php?id=61579095361256"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary-400 transition-colors"
